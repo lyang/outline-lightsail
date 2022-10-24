@@ -1,0 +1,6 @@
+---
+- name: Setup
+  community.general.terraform:
+    project_path: "{{role_path}}/files"
+    state: present
+
