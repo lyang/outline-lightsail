@@ -1,6 +1,30 @@
 ---
-- name: Setup
+- name: Init
+  ansible.builtin.shell:
+    cmd: "terraform init"
+    chdir: "{{role_path}}/files/{{directory}}"
+  loop:
+    - backend
+    - terraform
+  loop_control:
+    loop_var: directory
+  changed_when: false
+
+- name: Bootstrap
   community.general.terraform:
-    project_path: "{{role_path}}/files"
     state: present
+    project_path: "{{role_path}}/files/backend"
+    variables:
+      region: "{{AWS_REGION}}"
+  register: BACKEND
+
+- name: Apply
+  community.general.terraform:
+    state: present
+    project_path: "{{role_path}}/files/terraform"
+    backend_config:
+      region: "{{BACKEND.outputs.region.value}}"
+      bucket: "{{BACKEND.outputs.bucket.value}}"
+      key: "terraform.tfstate"
+      encrypt: true
 
