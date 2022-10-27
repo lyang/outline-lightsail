@@ -4,8 +4,8 @@
     cmd: "terraform init"
     chdir: "{{role_path}}/files/{{directory}}"
   loop:
-    - backend
-    - terraform
+    - tfstate
+    - outline
   loop_control:
     loop_var: directory
   changed_when: false
@@ -13,7 +13,7 @@
 - name: Bootstrap
   community.general.terraform:
     state: present
-    project_path: "{{role_path}}/files/backend"
+    project_path: "{{role_path}}/files/tfstate"
     variables:
       region: "{{AWS_REGION}}"
   register: BACKEND
@@ -21,10 +21,14 @@
 - name: Apply
   community.general.terraform:
     state: present
-    project_path: "{{role_path}}/files/terraform"
+    project_path: "{{role_path}}/files/outline"
+    variables:
+      region: "{{AWS_REGION}}"
     backend_config:
       region: "{{BACKEND.outputs.region.value}}"
       bucket: "{{BACKEND.outputs.bucket.value}}"
       key: "terraform.tfstate"
       encrypt: true
 
+- name: Refresh inventory to ensure new instaces exist in inventory
+  meta: refresh_inventory
