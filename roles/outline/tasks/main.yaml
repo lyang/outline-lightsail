@@ -1,0 +1,7 @@
+---
+- name: Clone Outline Repo
+  ansible.builtin.git:
+    accept_hostkey: yes
+    repo: https://github.com/Jigsaw-Code/outline-server.git
+    dest: /home/ubuntu/outline-server
+

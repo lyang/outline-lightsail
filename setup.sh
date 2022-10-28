@@ -11,7 +11,7 @@ setup() {
   else
     ANSIBLE_OPTIONS="--ask-become-pass"
   fi
-  ansible-playbook $CURRENT_DIR/playbook.yaml --inventory $CURRENT_DIR/inventory.yaml $ANSIBLE_OPTIONS
+  ansible-playbook $CURRENT_DIR/playbook.yaml $ANSIBLE_OPTIONS
 }
 
 setup-Linux() {

@@ -5,7 +5,7 @@
     chdir: "{{role_path}}/files/{{directory}}"
   loop:
     - tfstate
-    - outline
+    - lightsail
   loop_control:
     loop_var: directory
   changed_when: false
@@ -21,7 +21,7 @@
 - name: Apply
   community.general.terraform:
     state: present
-    project_path: "{{role_path}}/files/outline"
+    project_path: "{{role_path}}/files/lightsail"
     variables:
       region: "{{AWS_REGION}}"
     backend_config:
@@ -29,6 +29,3 @@
       bucket: "{{BACKEND.outputs.bucket.value}}"
       key: "terraform.tfstate"
       encrypt: true
-
-- name: Refresh inventory to ensure new instaces exist in inventory
-  meta: refresh_inventory

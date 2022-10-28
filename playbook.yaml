@@ -1,11 +1,16 @@
 ---
 - hosts: localhost
   tasks:
-    - ansible.builtin.shell: "ls roles"
-      register: ROLES
-      changed_when: false
-
-    - name: Include All Roles
+    - name: Setup Lightsail Instance
       ansible.builtin.include_role:
-        name: "{{item}}"
-      loop: "{{ROLES.stdout_lines}}"
+        name: terraform
+
+- hosts: lightsail
+  tasks:
+    - name: Refresh inventory to ensure new instaces exist in inventory
+      meta: refresh_inventory
+
+    - name: Install Outline Server
+      ansible.builtin.include_role:
+        name: outline
+
