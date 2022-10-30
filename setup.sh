@@ -11,6 +11,7 @@ setup() {
   else
     ANSIBLE_OPTIONS="--ask-become-pass"
   fi
+  rm -rf roles/terraform/files/generated/*
   ansible-playbook $CURRENT_DIR/playbook.yaml $ANSIBLE_OPTIONS
 }
 
